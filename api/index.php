@@ -1,6 +1,13 @@
 <?php
 
-// Arahkan direktori bootstrap cache & storage ke folder /tmp yang bisa diisi (writeable)
+use Illuminate\Support\Facades\URL;
+
+// Paksa semua URL dan Form action di Vercel menggunakan HTTPS
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    URL::forceScheme('https');
+}
+
+// Arahkan direktori bootstrap cache & storage ke folder /tmp
 $_ENV['APP_SERVICES_CACHE'] = '/tmp/services.php';
 $_ENV['APP_PACKAGES_CACHE'] = '/tmp/packages.php';
 $_ENV['APP_CONFIG_CACHE']   = '/tmp/config.php';
