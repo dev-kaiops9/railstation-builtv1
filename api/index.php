@@ -2,9 +2,16 @@
 
 use Illuminate\Support\Facades\URL;
 
-// Paksa semua URL dan Form action di Vercel menggunakan HTTPS
-if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+// Deteksi domain/host saat ini secara otomatis dari header Vercel
+$scheme = (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') ? 'https' : 'http';
+$host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? null;
+
+if ($host) {
+    // Paksa scheme HTTPS
     URL::forceScheme('https');
+    // Set APP_URL secara dinamis sesuai domain saat ini
+    $_ENV['APP_URL'] = 'https://' . $host;
+    putenv('APP_URL=https://' . $host);
 }
 
 // Arahkan direktori bootstrap cache & storage ke folder /tmp
