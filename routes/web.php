@@ -143,3 +143,15 @@ Route::get('/force-reset-admin', function () {
     );
     return 'User Admin berhasil diperbarui! Password: password123';
 });
+
+use Illuminate\Support\Facades\Artisan;
+
+Route::get('/run-migrate-seed', function () {
+    try {
+        Artisan::call('migrate:fresh', ['--force' => true]);
+        Artisan::call('db:seed', ['--force' => true]);
+        return 'Migrasi dan Seeding Seluruh Stasiun Berhasil!';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
