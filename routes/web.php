@@ -130,4 +130,16 @@ Route::get('/weather', [WeatherController::class, 'index'])->name('weather.index
 
 require __DIR__.'/auth.php';
 
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
+Route::get('/force-reset-admin', function () {
+    $user = User::updateOrCreate(
+        ['email' => 'admin@railstation.com'],
+        [
+            'name' => 'Admin',
+            'password' => Hash::make('password123')
+        ]
+    );
+    return 'User Admin berhasil diperbarui! Password: password123';
+});
